@@ -1,108 +1,193 @@
 import { StyleSheet } from "react-native";
 
-import { Colors } from "../../constants/theme";
-
-const currentTheme = Colors.dark;
-
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: currentTheme.bgMain,
+    position: "relative",
+    overflow: "hidden",
+  },
+
+  containerLight: {
+    backgroundColor: "#f4f7f6",
+  },
+
+  containerDark: {
+    backgroundColor: "#0f172a",
+  },
+
+  backgroundDecorationOne: {
+    position: "absolute",
+    width: 360,
+    height: 360,
+    borderRadius: 180,
+
+    top: -150,
+    left: -150,
+
+    backgroundColor: "rgba(45, 147, 156, 0.12)",
+  },
+
+  backgroundDecorationTwo: {
+    position: "absolute",
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+
+    bottom: -190,
+    right: -190,
+
+    backgroundColor: "rgba(42, 78, 109, 0.12)",
   },
 
   scrollContainer: {
     flexGrow: 1,
+
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
+
+    paddingHorizontal: 20,
+    paddingTop: 100,
+    paddingBottom: 30,
   },
 
   card: {
     width: "100%",
-    maxWidth: 400,
+    maxWidth: 420,
 
-    backgroundColor: currentTheme.bgCard,
+    paddingHorizontal: 32,
+    paddingVertical: 40,
 
-    padding: 24,
+    borderRadius: 16,
 
-    borderRadius: 12,
     borderWidth: 1,
-    borderColor: currentTheme.border,
 
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 8,
+      height: 10,
     },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.1,
     shadowRadius: 16,
 
     elevation: 8,
   },
 
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-
-    color: currentTheme.primary,
-
-    textAlign: "center",
-
-    marginBottom: 8,
+  cardLight: {
+    backgroundColor: "#ffffff",
+    borderColor: "rgba(0, 0, 0, 0.08)",
   },
 
-  subtitle: {
-    fontSize: 14,
+  cardDark: {
+    backgroundColor: "#1e293b",
+    borderColor: "rgba(255, 255, 255, 0.1)",
+  },
 
-    color: currentTheme.textMuted,
-
+  title: {
     textAlign: "center",
 
     marginBottom: 24,
+
+    fontSize: 32,
+    fontWeight: "700",
+    letterSpacing: -0.5,
+  },
+
+  titleLight: {
+    color: "#2d939c",
+  },
+
+  titleDark: {
+    color: "#4abeb6",
+  },
+
+  errorContainer: {
+    backgroundColor: "rgba(239, 68, 68, 0.1)",
+
+    padding: 10,
+
+    borderRadius: 8,
+
+    marginBottom: 20,
+  },
+
+  errorText: {
+    color: "#ef4444",
+
+    fontSize: 13,
+    fontWeight: "500",
+
+    textAlign: "center",
+  },
+
+  formGroup: {
+    width: "100%",
+    marginBottom: 16,
+  },
+
+  label: {
+    marginBottom: 8,
+
+    fontSize: 14,
+    fontWeight: "500",
+  },
+
+  labelLight: {
+    color: "#211f1f",
+  },
+
+  labelDark: {
+    color: "#f8fafc",
   },
 
   input: {
     width: "100%",
 
-    backgroundColor: currentTheme.bgMain,
-    color: currentTheme.textMain,
+    minHeight: 48,
 
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
 
+    borderWidth: 1,
     borderRadius: 8,
 
     fontSize: 16,
-
-    marginBottom: 16,
-
-    borderWidth: 1,
-    borderColor: currentTheme.border,
   },
 
-  passwordContainer: {
+  inputLight: {
+    backgroundColor: "#ffffff",
+
+    borderColor: "#cccccc",
+
+    color: "#211f1f",
+  },
+
+  inputDark: {
+    backgroundColor: "#1e293b",
+
+    borderColor: "rgba(255, 255, 255, 0.18)",
+
+    color: "#f8fafc",
+  },
+
+  passwordWrapper: {
     width: "100%",
+
+    minHeight: 48,
 
     flexDirection: "row",
     alignItems: "center",
 
-    backgroundColor: currentTheme.bgMain,
-
     borderWidth: 1,
-    borderColor: currentTheme.border,
-
     borderRadius: 8,
-
-    marginBottom: 14,
   },
 
   passwordInput: {
     flex: 1,
 
-    color: currentTheme.textMain,
+    minHeight: 46,
 
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
 
     fontSize: 16,
 
@@ -110,15 +195,26 @@ export const styles = StyleSheet.create({
   } as any,
 
   showPasswordButton: {
-    width: 50,
-    height: "100%",
+    minWidth: 76,
 
-    justifyContent: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+
     alignItems: "center",
+    justifyContent: "center",
   },
 
   showPasswordText: {
-    fontSize: 19,
+    fontSize: 13,
+    fontWeight: "600",
+  },
+
+  showPasswordTextLight: {
+    color: "#2a4e6d",
+  },
+
+  showPasswordTextDark: {
+    color: "#4abeb6",
   },
 
   rememberContainer: {
@@ -127,57 +223,79 @@ export const styles = StyleSheet.create({
 
     alignSelf: "flex-start",
 
-    marginBottom: 18,
+    marginTop: 0,
+    marginBottom: 24,
   },
 
   checkbox: {
-    width: 21,
-    height: 21,
+    width: 18,
+    height: 18,
 
-    borderRadius: 5,
+    borderRadius: 4,
 
-    borderWidth: 2,
-    borderColor: currentTheme.border,
-
-    backgroundColor: currentTheme.bgMain,
+    borderWidth: 1,
 
     justifyContent: "center",
     alignItems: "center",
 
-    marginRight: 9,
+    marginRight: 8,
+  },
+
+  checkboxLight: {
+    backgroundColor: "#ffffff",
+    borderColor: "#94a3b8",
+  },
+
+  checkboxDark: {
+    backgroundColor: "#0f172a",
+    borderColor: "#64748b",
   },
 
   checkboxChecked: {
-    backgroundColor: currentTheme.primary,
-    borderColor: currentTheme.primary,
+    backgroundColor: "#2d939c",
+    borderColor: "#2d939c",
   },
 
   checkboxCheck: {
     color: "#ffffff",
 
-    fontSize: 14,
-    fontWeight: "bold",
-
-    lineHeight: 16,
+    fontSize: 13,
+    fontWeight: "700",
   },
 
   rememberText: {
-    color: currentTheme.textMuted,
-
     fontSize: 14,
-    fontWeight: "500",
+  },
+
+  rememberTextLight: {
+    color: "#211f1f",
+  },
+
+  rememberTextDark: {
+    color: "#f8fafc",
   },
 
   button: {
-    backgroundColor: currentTheme.primary,
+    width: "100%",
+
+    backgroundColor: "#2d939c",
 
     paddingVertical: 14,
 
     borderRadius: 8,
 
     alignItems: "center",
+    justifyContent: "center",
 
-    marginTop: 4,
+    shadowColor: "#2d939c",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+
+    elevation: 3,
   },
 
   buttonDisabled: {
@@ -185,9 +303,42 @@ export const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: currentTheme.textLight,
+    color: "#ffffff",
 
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
+  },
+
+  footer: {
+    marginTop: 24,
+
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+
+    flexWrap: "wrap",
+  },
+
+  footerText: {
+    fontSize: 14,
+  },
+
+  footerTextLight: {
+    color: "#6c757d",
+  },
+
+  footerTextDark: {
+    color: "#94a3b8",
+  },
+
+  linkButton: {
+    color: "#2a4e6d",
+
+    fontSize: 14,
+    fontWeight: "600",
+
+    marginLeft: 5,
+
+    textDecorationLine: "underline",
   },
 });
