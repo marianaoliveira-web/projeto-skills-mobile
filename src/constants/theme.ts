@@ -1,3 +1,8 @@
+export const Fonts = {
+  mono: "monospace",
+  display: "sans-serif",
+};
+
 export const Colors = {
   light: {
     primary: "#2d939c",
@@ -7,6 +12,7 @@ export const Colors = {
     bgMain: "#f4f7f6",
     bgCard: "#ffffff",
     textMain: "#211f1f",
+    text: "#211f1f",
     textMuted: "#6c757d",
     textLight: "#ffffff",
     danger: "#e74c3c",
@@ -20,9 +26,12 @@ export const Colors = {
     bgMain: "#0f172a",
     bgCard: "#1e293b",
     textMain: "#f8fafc",
+    text: "#f8fafc",
     textMuted: "#94a3b8",
     textLight: "#ffffff",
     danger: "#e74c3c",
     border: "rgba(255, 255, 255, 0.1)",
   },
 };
+
+export type ThemeColor = keyof typeof Colors.light;
