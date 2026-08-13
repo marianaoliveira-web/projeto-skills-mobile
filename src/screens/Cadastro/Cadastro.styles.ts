@@ -55,7 +55,6 @@ export const styles = StyleSheet.create({
     marginBottom: 24,
     fontSize: 32,
     fontWeight: "700",
-    letterSpacing: -0.5,
   },
 
   titleLight: {
@@ -75,9 +74,23 @@ export const styles = StyleSheet.create({
 
   errorText: {
     color: "#ef4444",
-    fontSize: 13,
-    fontWeight: "500",
+    fontSize: 14,
     textAlign: "center",
+    fontWeight: "500",
+  },
+
+  successContainer: {
+    backgroundColor: "rgba(16, 185, 129, 0.1)",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+
+  successText: {
+    color: "#2d939c",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "600",
   },
 
   formGroup: {
@@ -111,14 +124,14 @@ export const styles = StyleSheet.create({
 
   inputLight: {
     backgroundColor: "#ffffff",
-    borderColor: "#cccccc",
     color: "#211f1f",
+    borderColor: "#cccccc",
   },
 
   inputDark: {
     backgroundColor: "#1e293b",
-    borderColor: "rgba(255, 255, 255, 0.18)",
     color: "#f8fafc",
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
 
   passwordWrapper: {
@@ -135,15 +148,13 @@ export const styles = StyleSheet.create({
     minHeight: 46,
     paddingLeft: 16,
     paddingRight: 8,
-    paddingVertical: 12,
     fontSize: 16,
     outlineStyle: "none",
   } as any,
 
   showPasswordButton: {
-    minWidth: 76,
+    paddingHorizontal: 14,
     minHeight: 46,
-    paddingHorizontal: 12,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -161,64 +172,16 @@ export const styles = StyleSheet.create({
     color: "#4abeb6",
   },
 
-  rememberContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
-    marginBottom: 24,
-  },
-
-  checkbox: {
-    width: 18,
-    height: 18,
-    borderRadius: 4,
-    borderWidth: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 8,
-  },
-
-  checkboxLight: {
-    backgroundColor: "#ffffff",
-    borderColor: "#94a3b8",
-  },
-
-  checkboxDark: {
-    backgroundColor: "#0f172a",
-    borderColor: "#64748b",
-  },
-
-  checkboxChecked: {
-    backgroundColor: "#2d939c",
-    borderColor: "#2d939c",
-  },
-
-  checkboxCheck: {
-    color: "#ffffff",
-    fontSize: 13,
-    fontWeight: "700",
-  },
-
-  rememberText: {
-    fontSize: 14,
-  },
-
-  rememberTextLight: {
-    color: "#211f1f",
-  },
-
-  rememberTextDark: {
-    color: "#f8fafc",
-  },
-
   button: {
     width: "100%",
     minHeight: 48,
-    backgroundColor: "#2d939c",
     paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 8,
+    backgroundColor: "#2d939c",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 4,
   },
 
   buttonDisabled: {

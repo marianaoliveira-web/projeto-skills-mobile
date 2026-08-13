@@ -1,130 +1,70 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { useTheme } from "../../contexts/ThemeContext";
 import api from "../../services/api";
-import { styles } from "./Login.styles";
+import { styles } from "./Cadastro.styles";
 
-export default function Login() {
+export default function Cadastro() {
   const router = useRouter();
   const { isDark } = useTheme();
 
   const [login, setLogin] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
 
   const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [gravarSenha, setGravarSenha] = useState(false);
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
-  const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function carregarCredenciaisSalvas() {
-      try {
-        const lembrarSenha = await AsyncStorage.getItem("@lembrarSenha");
-
-        if (lembrarSenha === "true") {
-          const loginSalvo = await AsyncStorage.getItem("@loginSalvo");
-
-          const senhaSalva = await AsyncStorage.getItem("@senhaSalva");
-
-          if (loginSalvo) {
-            setLogin(loginSalvo);
-          }
-
-          if (senhaSalva) {
-            setSenha(senhaSalva);
-          }
-
-          setGravarSenha(true);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar credenciais salvas:", error);
-      }
-    }
-
-    carregarCredenciaisSalvas();
-  }, []);
-
-  async function handleToggleGravarSenha() {
-    const novoValor = !gravarSenha;
-
-    setGravarSenha(novoValor);
-
-    if (!novoValor) {
-      try {
-        await AsyncStorage.multiRemove([
-          "@lembrarSenha",
-          "@loginSalvo",
-          "@senhaSalva",
-        ]);
-      } catch (error) {
-        console.error("Erro ao remover credenciais:", error);
-      }
-    }
-  }
-
-  async function handleLogin() {
+  async function handleCadastro() {
     setErro("");
+    setSucesso("");
 
-    if (!login.trim() || !senha) {
-      setErro("Por favor, preencha login e senha.");
+    if (!login.trim() || !senha || !confirmarSenha) {
+      setErro("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    if (senha !== confirmarSenha) {
+      setErro("As senhas não coincidem. Por favor, verifique.");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await api.post("/auth/login", {
+      await api.post("/usuario/cadastrar", {
         login: login.trim(),
         senha,
       });
 
-      const { token, id } = response.data;
+      setSucesso("Cadastro realizado com sucesso! Redirecionando...");
 
-      await AsyncStorage.setItem("@token", token);
-
-      await AsyncStorage.setItem("@usuarioId", String(id));
-
-      const nomeFormatado = login.includes("@") ? login.split("@")[0] : login;
-
-      await AsyncStorage.setItem(
-        "@user",
-        JSON.stringify({
-          login: nomeFormatado,
-        }),
-      );
-
-      if (gravarSenha) {
-        await AsyncStorage.multiSet([
-          ["@lembrarSenha", "true"],
-          ["@loginSalvo", login],
-          ["@senhaSalva", senha],
-        ]);
-      } else {
-        await AsyncStorage.multiRemove([
-          "@lembrarSenha",
-          "@loginSalvo",
-          "@senhaSalva",
-        ]);
-      }
-
-      router.replace("/home");
+      setTimeout(() => {
+        router.replace("/");
+      }, 2000);
     } catch (error: any) {
-      console.error("Erro no login:", error);
+      console.error("Erro ao realizar cadastro:", error);
 
-      setErro(error?.response?.data?.message || "Login ou senha incorretos.");
+      setErro(
+        error?.response?.data?.message ||
+          "Erro ao realizar cadastro. Por favor, tente novamente.",
+      );
     } finally {
       setLoading(false);
     }
@@ -154,12 +94,18 @@ export default function Login() {
               isDark ? styles.titleDark : styles.titleLight,
             ]}
           >
-            Entrar
+            Criar Conta
           </Text>
 
           {erro ? (
             <View style={styles.errorContainer}>
               <Text style={styles.errorText}>{erro}</Text>
+            </View>
+          ) : null}
+
+          {sucesso ? (
+            <View style={styles.successContainer}>
+              <Text style={styles.successText}>{sucesso}</Text>
             </View>
           ) : null}
 
@@ -178,12 +124,13 @@ export default function Login() {
                 styles.input,
                 isDark ? styles.inputDark : styles.inputLight,
               ]}
-              placeholder="Digite seu usuário"
+              placeholder="Escolha seu usuário"
               placeholderTextColor="#94a3b8"
               autoCapitalize="none"
               autoCorrect={false}
               value={login}
               onChangeText={setLogin}
+              editable={!loading}
             />
           </View>
 
@@ -215,10 +162,11 @@ export default function Login() {
                 secureTextEntry={!mostrarSenha}
                 value={senha}
                 onChangeText={setSenha}
+                editable={!loading}
               />
 
               <TouchableOpacity
-                onPress={() => setMostrarSenha((valorAtual) => !valorAtual)}
+                onPress={() => setMostrarSenha((valor) => !valor)}
                 style={styles.showPasswordButton}
                 activeOpacity={0.7}
               >
@@ -236,40 +184,67 @@ export default function Login() {
             </View>
           </View>
 
-          <TouchableOpacity
-            onPress={handleToggleGravarSenha}
-            style={styles.rememberContainer}
-            activeOpacity={0.8}
-          >
-            <View
-              style={[
-                styles.checkbox,
-                isDark ? styles.checkboxDark : styles.checkboxLight,
-                gravarSenha && styles.checkboxChecked,
-              ]}
-            >
-              {gravarSenha ? <Text style={styles.checkboxCheck}>✓</Text> : null}
-            </View>
-
+          <View style={styles.formGroup}>
             <Text
               style={[
-                styles.rememberText,
-                isDark ? styles.rememberTextDark : styles.rememberTextLight,
+                styles.label,
+                isDark ? styles.labelDark : styles.labelLight,
               ]}
             >
-              Gravar Senha
+              Confirmar Senha
             </Text>
-          </TouchableOpacity>
+
+            <View
+              style={[
+                styles.passwordWrapper,
+                isDark ? styles.inputDark : styles.inputLight,
+              ]}
+            >
+              <TextInput
+                style={[
+                  styles.passwordInput,
+                  {
+                    color: isDark ? "#f8fafc" : "#211f1f",
+                  },
+                ]}
+                placeholder="Confirme sua senha"
+                placeholderTextColor="#94a3b8"
+                secureTextEntry={!mostrarConfirmarSenha}
+                value={confirmarSenha}
+                onChangeText={setConfirmarSenha}
+                editable={!loading}
+              />
+
+              <TouchableOpacity
+                onPress={() => setMostrarConfirmarSenha((valor) => !valor)}
+                style={styles.showPasswordButton}
+                activeOpacity={0.7}
+              >
+                <Text
+                  style={[
+                    styles.showPasswordText,
+                    isDark
+                      ? styles.showPasswordTextDark
+                      : styles.showPasswordTextLight,
+                  ]}
+                >
+                  {mostrarConfirmarSenha ? "Ocultar" : "Mostrar"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           <TouchableOpacity
-            onPress={handleLogin}
+            onPress={handleCadastro}
             disabled={loading}
             activeOpacity={0.8}
             style={[styles.button, loading && styles.buttonDisabled]}
           >
-            <Text style={styles.buttonText}>
-              {loading ? "Entrando..." : "Entrar"}
-            </Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.buttonText}>Salvar</Text>
+            )}
           </TouchableOpacity>
 
           <View style={styles.footer}>
@@ -279,11 +254,11 @@ export default function Login() {
                 isDark ? styles.footerTextDark : styles.footerTextLight,
               ]}
             >
-              Não tem uma conta?
+              Já possui uma conta?
             </Text>
 
             <TouchableOpacity
-              onPress={() => router.push("/cadastro")}
+              onPress={() => router.replace("/")}
               activeOpacity={0.7}
             >
               <Text
@@ -292,7 +267,7 @@ export default function Login() {
                   isDark ? styles.linkTextDark : styles.linkTextLight,
                 ]}
               >
-                Cadastrar-se
+                Voltar para Login
               </Text>
             </TouchableOpacity>
           </View>
