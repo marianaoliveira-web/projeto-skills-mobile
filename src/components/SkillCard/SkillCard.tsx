@@ -6,6 +6,7 @@ import { styles } from "./SkillCard.styles";
 interface SkillCardProps {
   skillNome: string;
   skillImagem?: string;
+  skillDescricao?: string;
   level: number;
   index?: number;
   onEdit: () => void;
@@ -15,6 +16,7 @@ interface SkillCardProps {
 export default function SkillCard({
   skillNome,
   skillImagem,
+  skillDescricao,
   level,
   index = 0,
   onEdit,
@@ -88,6 +90,16 @@ export default function SkillCard({
         </View>
 
         <Text style={styles.skillName}>{skillNome}</Text>
+
+        {skillDescricao ? (
+          <Text
+            style={styles.skillDescription}
+            numberOfLines={3}
+            ellipsizeMode="tail"
+          >
+            {skillDescricao}
+          </Text>
+        ) : null}
 
         <View
           style={[
