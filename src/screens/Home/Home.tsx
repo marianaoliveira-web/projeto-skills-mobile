@@ -1,17 +1,19 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useCallback, useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import AddSkillModal from "../../components/AddSkillModal/AddSkillModal";
+import DeleteSkillModal from "../../components/DeleteSkillModal/DeleteSkillModal";
+import EditSkillModal from "../../components/EditSkillModal/EditSkillModal";
 import Header from "../../components/Header/Header";
 import SkillCard from "../../components/SkillCard/SkillCard";
+
 import { useTheme } from "../../contexts/ThemeContext";
 import api from "../../services/api";
 import { styles } from "./Home.styles";
@@ -20,6 +22,7 @@ interface Skill {
   id: number;
   skillId: number;
   skillNome: string;
+  skillDescricao?: string;
   skillImageUrl?: string;
   level: number;
 }
@@ -29,7 +32,12 @@ export default function Home() {
 
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   const carregarSkills = useCallback(async () => {
     try {
@@ -50,17 +58,8 @@ export default function Home() {
       });
 
       setSkills(response.data);
-    } catch (error: any) {
-      console.error("ERRO AO BUSCAR SKILLS");
-      console.error("Status:", error?.response?.status);
-      console.error("Data:", error?.response?.data);
-      console.error("URL:", error?.config?.url);
-      console.error("Método:", error?.config?.method);
-
-      Alert.alert(
-        "Erro",
-        `Status: ${error?.response?.status ?? "desconhecido"}`,
-      );
+    } catch (error) {
+      console.error("Erro ao buscar as skills:", error);
     } finally {
       setLoading(false);
     }
@@ -70,101 +69,24 @@ export default function Home() {
     carregarSkills();
   }, [carregarSkills]);
 
-  async function handleEdit(id: number) {
-    Alert.prompt(
-      "Editar nível",
-      "Digite o novo nível da sua Skill (1 a 5):",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Salvar",
-          onPress: async (novoLevelStr?: string) => {
-            if (!novoLevelStr) {
-              return;
-            }
-
-            const novoLevel = Number(novoLevelStr);
-
-            if (
-              Number.isNaN(novoLevel) ||
-              novoLevel < 1 ||
-              novoLevel > 5 ||
-              !Number.isInteger(novoLevel)
-            ) {
-              Alert.alert(
-                "Nível inválido",
-                "Digite um número inteiro entre 1 e 5.",
-              );
-              return;
-            }
-
-            try {
-              const token = await AsyncStorage.getItem("@token");
-
-              await api.put(
-                `/usuario-skills/atualizar/${id}`,
-                {
-                  level: novoLevel,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                },
-              );
-
-              await carregarSkills();
-            } catch (error) {
-              console.error("Erro ao atualizar a skill:", error);
-
-              Alert.alert(
-                "Erro",
-                "Erro ao atualizar a skill. Tente novamente.",
-              );
-            }
-          },
-        },
-      ],
-      "plain-text",
-      "",
-    );
+  function handleEdit(skill: Skill) {
+    setSelectedSkill(skill);
+    setIsEditModalOpen(true);
   }
 
-  function handleDelete(id: number) {
-    Alert.alert(
-      "Remover skill",
-      "Tem certeza que deseja remover esta skill do seu perfil?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              const token = await AsyncStorage.getItem("@token");
+  function handleCloseEditModal() {
+    setIsEditModalOpen(false);
+    setSelectedSkill(null);
+  }
 
-              await api.delete(`/usuario-skills/deletar/${id}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              });
+  function handleDelete(skill: Skill) {
+    setSelectedSkill(skill);
+    setIsDeleteModalOpen(true);
+  }
 
-              await carregarSkills();
-            } catch (error) {
-              console.error("Erro ao deletar a skill:", error);
-
-              Alert.alert("Erro", "Erro ao remover a skill. Tente novamente.");
-            }
-          },
-        },
-      ],
-    );
+  function handleCloseDeleteModal() {
+    setIsDeleteModalOpen(false);
+    setSelectedSkill(null);
   }
 
   const existingSkillIds = skills.map((skill) => skill.skillId);
@@ -204,7 +126,7 @@ export default function Home() {
 
           <TouchableOpacity
             style={styles.btnAddSkill}
-            onPress={() => setIsModalOpen(true)}
+            onPress={() => setIsAddModalOpen(true)}
             activeOpacity={0.8}
           >
             <Text style={styles.btnAddSkillText}>+ Nova Skill</Text>
@@ -232,9 +154,11 @@ export default function Home() {
               styles.emptyMessage,
               {
                 color: isDark ? "#f8fafc" : "#334155",
+
                 backgroundColor: isDark
                   ? "rgba(255, 255, 255, 0.1)"
                   : "rgba(15, 23, 42, 0.05)",
+
                 borderColor: isDark
                   ? "rgba(255, 255, 255, 0.25)"
                   : "rgba(15, 23, 42, 0.15)",
@@ -251,10 +175,11 @@ export default function Home() {
               <SkillCard
                 skillNome={item.skillNome}
                 skillImagem={item.skillImageUrl}
+                skillDescricao={item.skillDescricao}
                 level={item.level}
                 index={index}
-                onEdit={() => handleEdit(item.id)}
-                onDelete={() => handleDelete(item.id)}
+                onEdit={() => handleEdit(item)}
+                onDelete={() => handleDelete(item)}
               />
             )}
             showsVerticalScrollIndicator={false}
@@ -264,10 +189,27 @@ export default function Home() {
       </View>
 
       <AddSkillModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
         onSkillAdded={carregarSkills}
         existingSkillIds={existingSkillIds}
+      />
+
+      <EditSkillModal
+        isOpen={isEditModalOpen}
+        skillId={selectedSkill?.id ?? null}
+        skillNome={selectedSkill?.skillNome ?? ""}
+        currentLevel={selectedSkill?.level ?? 1}
+        onClose={handleCloseEditModal}
+        onSkillUpdated={carregarSkills}
+      />
+
+      <DeleteSkillModal
+        isOpen={isDeleteModalOpen}
+        skillId={selectedSkill?.id ?? null}
+        skillNome={selectedSkill?.skillNome ?? ""}
+        onClose={handleCloseDeleteModal}
+        onSkillDeleted={carregarSkills}
       />
     </View>
   );

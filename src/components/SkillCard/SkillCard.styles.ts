@@ -19,18 +19,24 @@ export const styles = StyleSheet.create({
 
   card: {
     width: "100%",
+    minHeight: 390,
+
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.15)",
+
     borderRadius: 16,
+
     padding: 22,
 
     alignItems: "center",
+
     overflow: "hidden",
   },
 
   imageContainer: {
     width: 76,
     height: 76,
+
     borderRadius: 14,
 
     backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -59,7 +65,7 @@ export const styles = StyleSheet.create({
 
     textAlign: "center",
 
-    marginBottom: 12,
+    marginBottom: 8,
 
     textShadowColor: "rgba(0, 0, 0, 0.3)",
     textShadowOffset: {
@@ -67,6 +73,25 @@ export const styles = StyleSheet.create({
       height: 2,
     },
     textShadowRadius: 4,
+  },
+
+  skillDescription: {
+    width: "100%",
+
+    minHeight: 58,
+
+    fontSize: 13,
+    lineHeight: 19,
+
+    fontWeight: "400",
+
+    color: "rgba(255, 255, 255, 0.82)",
+
+    textAlign: "center",
+
+    marginBottom: 12,
+
+    paddingHorizontal: 4,
   },
 
   levelBadge: {
@@ -127,6 +152,7 @@ export const styles = StyleSheet.create({
 
   segment: {
     flex: 1,
+
     height: "100%",
 
     borderRadius: 3,
@@ -141,7 +167,8 @@ export const styles = StyleSheet.create({
 
     width: "100%",
 
-    marginTop: 6,
+    marginTop: "auto",
+    paddingTop: 6,
   },
 
   btnEdit: {
