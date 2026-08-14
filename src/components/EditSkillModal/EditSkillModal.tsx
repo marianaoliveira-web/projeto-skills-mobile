@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     ActivityIndicator,
     Modal,
@@ -34,13 +34,6 @@ export default function EditSkillModal({
   const [level, setLevel] = useState(currentLevel);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
-
-  useEffect(() => {
-    if (isOpen) {
-      setLevel(currentLevel);
-      setErro("");
-    }
-  }, [isOpen, currentLevel]);
 
   function getLevelLabel() {
     if (level <= 2) {
