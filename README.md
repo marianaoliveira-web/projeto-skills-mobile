@@ -1,56 +1,217 @@
-# Welcome to your Expo app 👋
+# 🚀 Skills App (Frontend Mobile)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bem-vindo ao repositório Frontend Mobile do Projeto de Skills, desenvolvido como parte de um desafio técnico para um processo seletivo.
 
-## Get started
+Esta aplicação foi desenvolvida em React Native com Expo e TypeScript, oferecendo uma experiência mobile moderna e intuitiva para que os usuários possam realizar autenticação, cadastrar uma conta e gerenciar suas competências profissionais através da integração com a API RESTful do sistema.
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Tecnologias e Ferramentas Utilizadas
 
-2. Start the app
+- Framework: React Native
+- Plataforma: Expo
+- Linguagem: TypeScript
+- Gerenciamento de Rotas: Expo Router
+- Comunicação HTTP: Axios
+- Persistência Local: AsyncStorage
+- Estilização: StyleSheet do React Native
+- Gradientes: Expo Linear Gradient
+- Gerenciamento de Estado: React Hooks
+- Gerenciador de Dependências: npm
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 📱 Funcionalidades da Aplicação Mobile
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+O projeto foi desenvolvido atendendo aos requisitos propostos para a aplicação mobile:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 1. Tela de Login
 
-## Get a fresh project
+- Campo de login.
+- Campo de senha.
+- Botão para alternar a visibilidade da senha.
+- Opção "Gravar Senha".
+- Persistência dos dados de acesso através do AsyncStorage quando a opção estiver selecionada.
+- Remoção dos dados armazenados caso a opção seja desmarcada.
+- Integração com o endpoint de autenticação da API.
+- Redirecionamento para a Home após autenticação bem-sucedida.
 
-When you're ready, run:
+### 2. Tela de Cadastro
 
-```bash
-npm run reset-project
+- Campo de login.
+- Campo de senha.
+- Campo de confirmação de senha.
+- Botões para visualizar ou ocultar as senhas digitadas.
+- Validação para garantir que senha e confirmação sejam iguais.
+- Integração com o endpoint de cadastro da API.
+- Feedback ao usuário após cadastro realizado com sucesso.
+
+### 3. Tela Home
+
+- Cabeçalho personalizado com saudação ao usuário autenticado.
+- Botão de Logout.
+- Alternância entre tema claro e escuro.
+- Persistência da preferência de tema.
+- Listagem das Skills associadas ao usuário.
+- Cards contendo:
+  - Logo da tecnologia.
+  - Nome da Skill.
+  - Descrição.
+  - Nível de conhecimento.
+- Representação visual do nível através de uma bateria de conhecimento.
+- Classificação visual entre níveis Básico, Médio e Avançado.
+
+### 4. Gerenciamento de Skills
+
+A aplicação permite realizar o gerenciamento completo das Skills associadas ao perfil:
+
+- **Adicionar Skill:** modal contendo as Skills disponíveis retornadas pela API e seleção do nível de conhecimento.
+- **Editar Skill:** modal para atualização do nível da Skill já associada.
+- **Excluir Skill:** modal de confirmação antes da remoção da Skill do perfil.
+- Atualização automática da listagem após as operações.
+
+---
+
+## 🎨 Interface e Experiência do Usuário
+
+A interface mobile segue a mesma identidade visual utilizada na aplicação Web do projeto, mantendo consistência entre as plataformas.
+
+Foram utilizados:
+
+- Gradientes nos cards de Skills.
+- Tema claro e escuro.
+- Cards com bordas arredondadas.
+- Sombras e efeitos visuais.
+- Indicador de nível inspirado em uma bateria.
+- Cores diferentes para representar os níveis de conhecimento.
+- Modais personalizados para adição, edição e exclusão.
+- Layout adaptado para dispositivos móveis.
+
+---
+
+## 🔒 Segurança
+
+A aplicação utiliza autenticação baseada em Token JWT fornecido pelo Backend.
+
+Após o login:
+
+- O Token JWT é armazenado localmente.
+- O identificador do usuário autenticado é mantido para utilização nas requisições.
+- As requisições destinadas às rotas protegidas da API enviam o Token JWT no cabeçalho `Authorization`.
+- O acesso às funcionalidades da Home depende da autenticação do usuário.
+- Ao realizar Logout, os dados relacionados à sessão são removidos.
+
+As credenciais somente são mantidas para preenchimento posterior quando o usuário escolhe explicitamente a opção **Gravar Senha**.
+
+---
+
+## 🏗️ Organização do Projeto
+
+O código foi dividido em responsabilidades para facilitar manutenção e reutilização.
+
+```text
+src/
+├── app/
+├── components/
+├── contexts/
+├── screens/
+├── services/
+└── ...
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+```
 
-### Other setup steps
+- `app`: gerenciamento das rotas através do Expo Router.
+- `components`: componentes reutilizáveis da interface, como Header, SkillCard e Modais.
+- `contexts`: estados e comportamentos compartilhados pela aplicação.
+- `screens`: telas principais da aplicação.
+- `services`: configuração da comunicação com a API através do Axios.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+---
 
-## Learn more
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## ⚙️ Como executar o projeto localmente
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Pré-requisitos
 
-## Join the community
+- Node.js instalado.
+- npm instalado.
+- Expo configurado no ambiente.
+- Backend do projeto (`projeto-skills-backend`) rodando localmente.
 
-Join our community of developers creating universal apps.
+### Passos
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/marianaoliveira-web/projeto-skills-mobile.git
+```
+
+2. Entre na pasta do projeto:
+
+```bash
+cd projeto-skills-mobile
+```
+
+3. Instale as dependências:
+
+```bash
+npm install
+```
+
+4. Verifique a configuração da API em:
+
+```text
+src/services/api.ts
+```
+
+O endereço deve apontar para o Backend do Projeto Skills.
+
+Para execução através do navegador utilizando o Expo Web, o Backend local pode ser acessado através de:
+
+```text
+http://localhost:8080
+```
+
+> ⚠️ Em dispositivos físicos ou emuladores, `localhost` pode não representar o computador onde o Backend está sendo executado. Nesse caso, pode ser necessário utilizar o endereço IP da máquina na rede local ou o endereço apropriado para o emulador utilizado.
+
+5. Inicie o projeto:
+
+```bash
+npx expo start
+```
+
+Após iniciar o Expo, utilize as opções apresentadas no terminal para executar a aplicação no ambiente desejado.
+
+---
+
+## 📍 Rotas da Aplicação
+
+| Rota        | Tela     | Descrição                                      | Acesso        |
+| ----------- | -------- | ---------------------------------------------- | ------------- |
+| `/`         | Login    | Tela de autenticação do usuário.               | Público       |
+| `/cadastro` | Cadastro | Tela para criação de uma nova conta.           | Público       |
+| `/home`     | Home     | Painel de gerenciamento das Skills do usuário. | Privado (JWT) |
+
+---
+
+## 🔗 Integração com o Backend
+
+O aplicativo Mobile consome a mesma API RESTful utilizada pela aplicação Web.
+
+Entre as operações utilizadas estão:
+
+- Autenticação do usuário.
+- Cadastro de usuário.
+- Consulta do catálogo de Skills.
+- Consulta das Skills associadas ao usuário.
+- Associação de novas Skills.
+- Atualização do nível de conhecimento.
+- Exclusão de Skills associadas.
+
+O Backend é responsável pela persistência dos dados em PostgreSQL e pela segurança das rotas através do Spring Security e JWT.
+
+---
+
+Desenvolvido com dedicação por Mariana Alves de Oliveira 💻✨
