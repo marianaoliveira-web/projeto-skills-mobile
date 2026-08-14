@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -41,8 +41,6 @@ export default function Home() {
 
   const carregarSkills = useCallback(async () => {
     try {
-      setLoading(true);
-
       const token = await AsyncStorage.getItem("@token");
       const usuarioId = await AsyncStorage.getItem("@usuarioId");
 
@@ -65,9 +63,10 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
+  useState(() => {
     carregarSkills();
-  }, [carregarSkills]);
+    return true;
+  });
 
   function handleEdit(skill: Skill) {
     setSelectedSkill(skill);
@@ -154,11 +153,9 @@ export default function Home() {
               styles.emptyMessage,
               {
                 color: isDark ? "#f8fafc" : "#334155",
-
                 backgroundColor: isDark
                   ? "rgba(255, 255, 255, 0.1)"
                   : "rgba(15, 23, 42, 0.05)",
-
                 borderColor: isDark
                   ? "rgba(255, 255, 255, 0.25)"
                   : "rgba(15, 23, 42, 0.15)",
@@ -196,6 +193,7 @@ export default function Home() {
       />
 
       <EditSkillModal
+        key={selectedSkill ? `edit-${selectedSkill.id}` : "edit-empty"}
         isOpen={isEditModalOpen}
         skillId={selectedSkill?.id ?? null}
         skillNome={selectedSkill?.skillNome ?? ""}
